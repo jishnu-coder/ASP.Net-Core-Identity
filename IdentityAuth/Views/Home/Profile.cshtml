@@ -1,0 +1,27 @@
+﻿@model EditUserView
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<h1>Profile</h1>
+<div class="card">
+    <div class="card-title">
+        User ID :   @Model.Id 
+    </div>
+    <div class="card-body">
+        <div class="card-title">UserName :   @Model.UserName</div>
+        <div class="card-title">Email :   @Model.UserName</div>
+        <div class="card-title">City :   @Model.City</div>
+    </div>
+
+    <div class="card-footer">
+        <a class="dropdown-item" asp-controller="Home" asp-action="Home">Edit</a>
+       
+    </div>
+</div>
+<ul class="list-group list-group-horizontal">
+    @foreach (var role in Model.Roles)
+    {
+        <li class="list-group-item">@role</li>
+    }
+</ul>

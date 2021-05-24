@@ -1,0 +1,58 @@
+﻿@model IEnumerable<IdentityRole>
+@using Microsoft.AspNetCore.Authorization;
+@inject IAuthorizationService authorizationService;
+@{
+    ViewData["Title"] = "RoleList";
+}
+
+<h1>RoleList</h1>
+
+@if (Model.Any())
+{
+    <a asp-action="CreateRole" asp-controller="Account" class="btn btn-primary">Create Role</a>
+    foreach (var item in Model)
+    {
+        <div class="card">
+            <h5 class="card-header"><label>Role Id : </label>@item.Id</h5>
+            <div class="card-body">
+                <h5 class="card-title"><label>Role Name :  </label>@item.Name</h5>
+            </div>
+            <div class="card-footer">
+                <form method="post" asp-action="DeleteRole" asp-controller="Account" asp-route-id=@item.Id>
+                    @if ((await authorizationService.AuthorizeAsync(User, "EditRolePolicy")).Succeeded)
+                    {
+                        <a asp-action="EditRole" asp-controller="Account" asp-route-id=@item.Id class="btn btn-secondary">Edit</a>
+                    }
+
+                    @if ((await authorizationService.AuthorizeAsync(User, "DeleteRolePolicy")).Succeeded)
+                    {
+                        <span id="delete_@item.Id">
+                            <a class="btn btn-danger" onclick="confirmDelete('@item.Id',true)">Delete</a>
+                        </span>
+                        <span id="ConfirmDelete_@item.Id" style="display:none">
+                            <span>Are You Sure to Delete This</span>
+                            <input type="submit" class="btn btn-primary" value="Yes" />
+                            <a class="btn btn-primary" onclick="confirmDelete('@item.Id',false)">No</a>
+                        </span>
+                    }
+
+                </form>
+
+
+
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="card">
+        <h5 class="card-header">No Role Created</h5>
+        <div class="card-body">
+
+            <p class="card-text">Click below button to create a role</p>
+            <a asp-action="CreateRole" asp-controller="Account" class="btn btn-primary">Create Role</a>
+        </div>
+    </div>
+}
+
